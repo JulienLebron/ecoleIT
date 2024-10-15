@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <h2>Création d'un article</h2>
+
+    {# form() c'est fonction twig permettant d'afficher un formulaire #}
+    {# {{ form(formArticle) }} #}
+
+    {{ form_start(formArticle) }}
+
+    {{ form_row(formArticle.title, {
+        label: "Titre de l'article",
+        attr: {
+            placeholder: "Donnez un titre à votre nouvel article."
+        }
+    }) }}
+    {{ form_row(formArticle.content) }}
+    {{ form_row(formArticle.image) }}
+
+    <button type="submit" class="btn btn-primary mt-2">Confirmer</button>
+
+    {{ form_end(formArticle) }}
+
+{% endblock %}
