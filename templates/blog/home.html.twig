@@ -6,7 +6,7 @@
         {% for article in articles  %}
             <div class="card mb-5">
                 <a class="card-link" href="{{  path('blog_show', {'id': article.id} ) }}" style="width: 275px; height: 400px; background: no-repeat center/cover url('{{ article.image }}'); ">
-                    <span class="badge rounded-pill text-bg-primary">Article</span>
+                    <span class="badge rounded-pill text-bg-primary">{{ article.category }}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ article.title   }}</h5>
                         <small>Ecrit le {{ article.createdAt | date('d/m/Y') }}</small>

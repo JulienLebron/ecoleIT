@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Article;
+use App\Entity\Category;
+use App\Entity\Comment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -10,19 +12,49 @@ class ArticleFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for($i = 1; $i <= 20; $i++) 
+        $faker = \Faker\Factory::create('fr_FR');
+
+        for($i = 1; $i <= 3; $i++)
         {
-            $article = new Article(); 
-            // on instancie la class Article qui se trouve dans le dossier App\Entity
-            // Nous pouvons maintenant faire appel au setteur pour créer des articles
-            $article->setTitle("Titre de l'article n°$i")
-                    ->setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
-                    ->setImage("https://picsum.photos/200/300")
-                    ->setCreatedAt(new \DateTimeImmutable());
-                    // permet de sauvegarder l'article en attendant le flush
-                    $manager->persist($article);
+            $category = new Category;
+            $category->setTitle($faker->sentence())
+                    ->setDescription("Nouvelle Catégorie");
+
+            $manager->persist($category);
+
+            for($j=1; $j <= mt_rand(4,6); $j++)
+            {
+                $article = new Article;
+                $content = '<p>' . join('</p><p>', $faker->paragraphs(5)) . '</p>';
+                $generatedId = mt_rand(1, 200);
+
+                $article->setTitle($faker->sentence)
+                        ->setContent($content)
+                        ->setImage("https://picsum.photos/id/$generatedId/275/400")
+                        ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-6 months')))
+                        ->setCategory($category);
+                $manager->persist($article);
+
+                for($k=1; $k <= mt_rand(4, 10); $k++)
+                {
+                    $comment = new Comment;
+                    $content = '<p>' . join('</p><p>', $faker->paragraphs(2)) . '</p>';
+
+                    $now = new \DateTime();
+                    $interval = $now->diff($article->getCreatedAt());
+                    $days = $interval->days;
+                    $minimum = '-' . $days . ' days';
+
+                    $comment->setAuthor($faker->name)
+                            ->setContent($content)
+                            ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween($minimum)))
+                            ->setArticle($article);
+                    $manager->persist($comment);
+                }
+            }
         }
-        // le flush permet d'exécuter la requête SQL
         $manager->flush();
     }
 }
+
+
