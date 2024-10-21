@@ -50,37 +50,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/blog/new', name: 'blog_create')]
-    #[Route('/blog/edit/{id}', name: 'blog_edit')]
-    public function form(Request $request, EntityManagerInterface $manager, Article $article = null ): Response
-    {
-        // si nous ne récupérons pas d'objet $article, nous en créons un vide et prêt à être rempli
-        if(!$article) 
-        {
-            $article = new Article;
-            $article->setCreatedAt(new \DateTimeImmutable());
-        }
-        // la classe Request contient les données véhiculées par les superglobales ($_POST, $_GET)
-        // createForm() permet de récupérer un modèle de formulaire
-        $form = $this->createForm(ArticleType::class, $article); // je lie le formulaire à mon objet $article
-        $form->handleRequest($request);
-        // handleRequest() permet d'insérer les données du formulaire dans l'objet $article
-        // elle permet aussi de faire les vérifications sur le formulaire (quelle méthode? est-ce que les sont remplis ? etc) 
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $manager->persist($article); // prépare à l'insertion de l'article en BDD
-            $manager->flush(); // exécute la requête d'insertion
-            return $this->redirectToRoute('blog_show', [
-                'id' => $article->getId()
-            ]);
-        }
-
-        return $this->render('blog/form.html.twig', [
-            // createView() renvoie un objet représentant l'affichage du formulaire
-            'formArticle' => $form->createView()
-        ]);
-    }
+    
 
 
 
