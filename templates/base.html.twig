@@ -7,6 +7,7 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -26,14 +27,33 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('blog_create') }}">Création
-                                d'un article</a>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">JEUX</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Articles</a>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">ACTU</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">SOLDES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">HIGH-TECH</a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ path('app_logout') }}"><i class="fa-solid fa-gears"></i> ADMIN</a>
+                            </li>
+                        {% endif %}
+                        {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> DECONNEXION</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ path('app_login') }}"><i class="fa-solid fa-unlock"></i> CONNEXION</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
